@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CENTRAL DE OPERAÇÃO</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 28px;
+      max-width: 750px;
+      margin: 40px auto;
+      padding: 20px;
+      background: yellow;  /* Alterei a cor de fundo para amarelo */
+      border-radius: 8px;
+    }
+    h1 {
+      text-align: center;
+      text-transform: uppercase;
+      color: #333;
+      font-size: 36px;
+    }
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+      font-size: 28px;
+    }
+    input[type="text"],
+    input[type="datetime-local"],
+    select {
+      width: 100%;
+      padding: 12px;
+      font-size: 28px;
+      margin-top: 6px;
+      box-sizing: border-box;
+    }
+    .buttons {
+      margin-top: 24px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 14px 24px;
+      font-size: 28px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+    .btn-whatsapp {
+      background-color: #25d366;
+      color: white;
+    }
+    .btn-copy {
+      background-color: #6c757d;
+      color: white;
+      margin-top: 12px;
+    }
+    #ocorrenciasGeradas {
+      margin-top: 45px;
+    }
+    .ocorrencia {
+      background: #fff;
+      border-left: 5px solid #007bff;
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      border-radius: 6px;
+      font-size: 28px;
+    }
+    /* Estilo para tabela de ocorrências */
+    #tabelaOcorrencias {
+      margin-top: 40px;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 20px;
+      display: none;
+    }
+    #tabelaOcorrencias th,
+    #tabelaOcorrencias td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    #tabelaOcorrencias thead tr {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>CENTRAL DE OPERAÇÃO</h1>
+
+  <form id="ocorrenciaForm">
+    <label for="remetente">Remetente:</label>
+    <input type="text" id="remetente" value="Central de Operações" readonly />
+
+    <label for="dataHora">Data/Hora:</label>
+    <input type="datetime-local" id="dataHora" readonly />
+
+    <label for="local">Local Monitorado:</label>
+    <select id="local">
+    <option value="CDM CODO MERCADO CENTRAL">CDM-CODO MERCADO CENTRAL</option>
+  <option value="TIN TIMBIRAS">TIN-TIMBIRAS</option>
+  <option value="CTZ TIMBIRAS">CTZ-TIMBIRAS</option>
+  <option value="UBS URBANO SANTOS">UBS-URBANO SANTOS</option>
+  <option value="HBC HUMBERTO DE CAMPOS">HBC-HUMBERTO DE CAMPOS</option>
+  <option value="SMR SANTO AMARO DO MARANHÃO">SMR-SANTO AMARO DO MARANHÃO</option>
+  <option value="TUT TUTOIA">TUT-TUTOIA</option>
+  <option value="CNB CANA BRAVA">CNB-CANA BRAVA</option>
+  <option value="PLN PAULINO NEVES">PLN-PAULINO NEVES</option>
+  <option value="VAG VARGEM GRANDE">VAG-VARGEM GRANDE</option>
+  <option value="PLT PALESTINA">PLT-PALESTINA</option>
+  <option value="ROS ROSÁRIO">ROS-ROSÁRIO</option>
+  <option value="ICT ICATU">ICT-ICATU</option>
+  <option value="SRI SANTA RITA">SRI-SANTA RITA</option>
+  <option value="ALA ALDEIAS ALTAS">ALA-ALDEIAS ALTAS</option>
+  <option value="MTS MATÕES">MTS-MATÕES</option>
+  <option value="SJE SÃO JOÃO DO SOTER">SJE-SÃO JOÃO DO SOTER</option>
+  <option value="LCU CONCEIÇÃO DO LAGO AÇÚ">LCU-CONCEIÇÃO DO LAGO AÇÚ</option>
+  <option value="PIP PIRAPEMAS">PIP-PIRAPEMAS</option>
+  <option value="SAM SÃO MATEUS DO MARANHÃO">SAM-SÃO MATEUS DO MARANHÃO</option>
+  <option value="SLG SÃO LUIS GONZAGA DO MARANHÃO">SLG-SÃO LUIS GONZAGA DO MARANHÃO</option>
+  <option value="SLZ SANTA LUZIA DO TIDE">SLZ-SANTA LUZIA DO TIDE</option>
+  <option value="MON MONÇÃO">MON-MONÇÃO</option>
+  <option value="BCU BURITICUPU">BCU-BURITICUPU</option>
+  <option value="MAS MARACAÇUMÉ">MAS-MARACAÇUMÉ</option>
+  <option value="AGN ANGICAL DO PIAUÍ">AGN-ANGICAL DO PIAUÍ</option>
+  <option value="CTP CARUTAPERA">CTP-CARUTAPERA-VIGILANTE NOTURNO</option>
+  <option value="GDV GODOFREDO VIANA">GDV-GODOFREDO VIANA</option>
+  <option value="SPB SÃO PEDRO DA ÁGUA BRANCA">SPB-SÃO PEDRO DA ÁGUA BRANCA</option>
+  <option value="SFB SÃO FRANCISCO DO BREJÃO">SFB-SÃO FRANCISCO DO BREJÃO</option>
+  <option value="ART ARAGUATINS">ART-ARAGUATINS</option>
+  <option value="STN SITIO NOVO DO TOCANTINS">STN-SITIO NOVO DO TOCANTINS</option>
+  <option value="PNE PRAIA NORTE">PNE-PRAIA NORTE</option>
+  <option value="SPT SAMPAIO">SPT-SAMPAIO</option>
+  <option value="COA CONCEIÇÃO DO ARAUGUAIA">COA-CONCEIÇÃO DO ARAUGUAIA</option>
+  <option value="ABR ANGICAL DO PIAUÍ">ABR-ANGICAL DO PIAUÍ</option>
+  <option value="AMA AMARANTE">AMA-AMARANTE</option>
+  <option value="ANG ANGICAL DO PIAUÍ">ANG-ANGICAL DO PIAUÍ</option>
+  <option value="BDR BARRO DURO">BDR-BARRO DURO</option>
+  <option value="DLB DEMERVAL LOBÃO">DLB-DEMERVAL LOBÃO</option>
+  <option value="MGL MONSENHOR GIL">MGL-MONSENHOR GIL</option>
+  <option value="PAL PALMEIRAIS">PAL-PALMEIRAIS</option>
+  <option value="REG REGENERAÇÃO">REG-REGENERAÇÃO</option>
+  <option value="AGR AGRICOLÂNDIA">AGR-AGRICOLÂNDIA</option>
+  <option value="SPE SÃO PEDRO DO PIAUÍ">SPE-SÃO PEDRO DO PIAUÍ</option>
+  <option value="ALS ALTOS">ALS-ALTOS</option>
+  <option value="ALG ALTO LONGÁ">ALG-ALTO LONGÁ</option>
+  <option value="BNT BENEDITINOS">BNT-BENEDITINOS</option>
+  <option value="NSA NOVO SANTO ANTONIO">NSA-NOVO SANTO ANTONIO</option>
+  <option value="OEI OEIRAS">OEI-OEIRAS</option>
+  <option value="EVL ELESBÃO VELOSO">EVL-ELESBÃO VELOSO</option>
+  <option value="SCP SANTA CRUZ DO PIAUÍ">SCP-SANTA CRUZ DO PIAUÍ</option>
+  <option value="SJP SÃO JOÃO DO PIAUÍ">SJP-SÃO JOÃO DO PIAUÍ</option>
+  <option value="VAL VALENÇA DO PIAUÍ">VAL-VALENÇA DO PIAUÍ</option>
+  <option value="WAF WALL FERRAZ">WAF-WALL FERRAZ</option>
+  <option value="CAM CAMPO MAIOR">CAM-CAMPO MAIOR-VIGIA NOTURNO</option>
+  <option value="CAD CAMPO MAIOR DEPOSITO">CAD-CAMPO MAIOR DEPOSITO-VIGIA NOTURNO</option>
+  <option value="CST CASTELO DO PIAUÍ">CST-CASTELO DO PIAUÍ</option>
+  <option value="JFT JOSÉ DE FREITAS">JFT-JOSÉ DE FREITAS</option>
+  <option value="MIA MIGUEL ALVES">MIA-MIGUEL ALVES</option>
+  <option value="SMT SÃO MIGUEL DO TAPUIO">SMT-SÃO MIGUEL DO TAPUIO</option>
+  <option value="UNI UNIÃO">UNI-UNIÃO</option>
+  <option value="LAL LAGOA ALEGRE">LAL-LAGOA ALEGRE</option>
+  <option value="BHO BOA HORA">BHO-BOA HORA</option>
+  <option value="ARA ARAIOSES">ARA-ARAIOSES</option>
+  <option value="CHV CHAVAL">CHV-CHAVAL</option>
+  <option value="CIM CAMOCIM">CIM-CAMOCIM</option>
+  <option value="COC COCAL">COC-COCAL</option>
+  <option value="JPR JOAQUIM PIRES">JPR-JOAQUIM PIRES</option>
+  <option value="LCO LUIS CORREIA">LCO-LUIS CORREIA</option>
+  <option value="PPM PARNAÍBA PINHEIRO MACHADO">PPM-PARNAÍBA PINHEIRO MACHADO</option>
+  <option value="PIR PIRIPIRI">PIR-PIRIPIRI-VIGILANTE NOTURNO</option>
+  <option value="PID PIRIPIRI DEPOSITO">PID-PIRIPIRI DEPOSITO-VIGILANTE NOTURNO</option>
+  <option value="BAR BARRAS">BAR-BARRAS</option>
+  <option value="ESP ESPERANTINA">ESP-ESPERANTINA</option>
+  <option value="MIO MATIAS OLÍMPIO">MIO-MATIAS OLÍMPIO</option>
+  <option value="PRT PORTO">PRT-PORTO</option>
+  <option value="SBT SÃO BENEDITO">SBT-SÃO BENEDITO</option>
+  <option value="TIA TIANGUÁ">TIA-TIANGUÁ</option>
+  <option value="CCA CAPITÃO DE CAMPOS">CCA-CAPITÃO DE CAMPOS</option>
+  <option value="NSR NOSSA SENHORA DOS REMÉDIOS">NSR-NOSSA SENHORA DOS REMÉDIOS</option>
+  <option value="SFR SÃO FRANCISCO DO MA">SFR-SÃO FRANCISCO DO MA</option>
+  <option value="SJS SÃO JOÃO DA SERRA">SJS-SÃO JOÃO DA SERRA</option>
+  <option value="CBP CARAÚBAS">CBP-CARAÚBAS</option>
+  <option value="DAV DIRCEU ARCOVERDE">DAV-DIRCEU ARCOVERDE</option>
+  <option value="RGO RIBEIRO GONÇALVES">RGO-RIBEIRO GONÇALVES</option>
+  <option value="FLD DEPÓSITO DE FLORIANO">FLD-DEPÓSITO DE FLORIANO-VIGILANTE NOTURNO</option>
+  <option value="TRI TRINDADE">TRI-TRINDADE</option>
+  <option value="OUR OURICURI">OUR-OURICURI</option>
+  <option value="VIC VIÇOSA DO CEARÁ">VIC-VIÇOSA DO CEARÁ</option>
+  <option value="BAT BATALHA">BAT-BATALHA</option>
+  <option value="SRN SÃO RAIMUNDO NONATO">SRN-SÃO RAIMUNDO NONATO</option>
+  <option value="XAB XAMBIOÁ">XAB-XAMBIOÁ</option>
+  <option value="RDP REDENÇÃO DO PARA">RDP-REDENÇÃO DO PARA</option>
+  <option value="PMA PADRE MARCOS">PMA-PADRE MARCOS</option>
+  <option value="INH INHUMA">INH-INHUMA</option>
+  <option value="AGD AGUA DOCE DO MARANHÃO">AGD-AGUA DOCE DO MARANHÃO</option>
+  <option value="PIC PICOS">PIC-PICOS</option>
+  <option value="PAR PARNAIBA">PAR-PARNAIBA</option>
+  <option value="COR CORRENTE">COR-CORRENTE</option>
+  <option value="ACA AIAILÂNDIA">ACA-AIAILÂNDIA</option>
+  <option value="BAC BACABAL">BAC-BACABAL</option>
+  <option value="CAX CAXIAS">CAX-CAXIAS</option>
+  <option value="CDP CAXIAS DEP FECHADO">CDP-CAXIAS DEP FECHADO</option>
+  <option value="COD CODÔ">COD-CODÔ-MA</option>
+  <option value="ZED ZE DOCA">ZED-ZE DOCA-MA-VIGILANTE NOTURNO</option>
+  <option value="LAB LAGOA DO BARRO">LAB-LAGOA DO BARRO</option>
+  <option value="SIN SANTA INES">SIN-SANTA INES-MA-VIGILANTE NOTURNO</option>
+  <option value="DSI DEPOSITO DE SANTA INES">DSI-DEPOSITO DE SANTA INES-MA-VIGILANTE NOTURNO</option>
+  <option value="CAV COCAL DOS ALVES">CAV-COCAL DOS ALVES</option>
+  <option value="SRO SERROLANDIA">SRO-SERROLANDIA</option>
+  <option value="PED PEDREIRAS">PED-PEDREIRAS</option>
+  <option value="PDU PRESIDENTE DUTRA">PDU-PRESIDENTE DUTRA</option>
+  <option value="DPU DEPOSITO PRESIDENTE DUTRA">DPU-DEPOSITO PRESIDENTE DUTRA</option>
+  <option value="TUN TUNTUM">TUN-TUNTUM</option>
+  <option value="CPP CAMPINAS DO PIAUI">CPP-CAMPINAS DO PIAUI</option>
+  <option value="PIN PINHEIRO">PIN-PINHEIRO</option>
+  <option value="CTA COROATÁ">CTA-COROATÁ</option>
+  <option value="IDC IMPERATRIZ DEPOSITO">IDC-IMPERATRIZ DEPOSITO</option>
+  <option value="HUN HUGO NAPOLEAO">HUN-HUGO NAPOLEAO</option>
+  <option value="RGR REDENÇÃO DO GURGUÉIA">RGR-REDENÇÃO DO GURGUÉIA</option>
+  <option value="PEN PENALVA">PEN-PENALVA</option>
+  <option value="MNA TERESINA">MNA-TERESINA</option>
+  <option value="CDE CORRENTE DEPOSITO">CDE-CORRENTE DEPOSITO</option>
+  <option value="VLB VILA LOBÃO">VLB-VILA LOBÃO</option>
+  <option value="WAN WANDERLEY">WAN-WANDERLEY</option>
+  <option value="PIO PIO XII">PIO-PIO XII</option>
+  <option value="CGT CHEGA TUDO">CGT-CHEGA TUDO</option>
+  <option value="AFC AFONSO CUNHA">AFC-AFONSO CUNHA</option>
+  <option value="SFM SANTA FILOMENA DO MARANHÃO">SFM-SANTA FILOMENA DO MARANHÃO</option>
+  <option value="SJV SÃO JOAO DA VARJOTA">SJV-SÃO JOAO DA VARJOTA</option>
+  <option value="BVI BELA VISTA DO MARANHÃO">BVI-BELA VISTA DO MARANHÃO</option>
+  <option value="JUA JUAZEIRO">JUA-JUAZEIRO-VIGILANTE NOTURNO</option>
+  <option value="SCV SANTA CRUZ DA VENERADA">SCV-SANTA CRUZ DA VENERADA</option>
+  <option value="SMP SIMPLICIO MENDES">SMP-SIMPLICIO MENDES</option>
+  <option value="NIQ NOVA IORQUE">NIQ-NOVA IORQUE</option>
+  <option value="BBS BAIRRO BOM SUCESSO">BBS-BAIRRO BOM SUCESSO</option>
+  <option value="IMP IMPERATRIZ">IMP-IMPERATRIZ</option>
+  <option value="CXE CAXIAS ELETRO">CXE-CAXIAS ELETRO</option>
+  <option value="XIN XINGUARA">XIN-XINGUARA</option>
+  <option value="AMM AMARANTES DO MARANHAO">AMM-AMARANTES DO MARANHAO</option>
+  <option value="DAB DEPOSITO AGUA BRANCA">DAB-DEPOSITO AGUA BRANCA</option>
+  <option value="PJM PETROLINA JOSÉ E MARIA">PJM-PETROLINA JOSÉ E MARIA</option>
+  <option value="CHA CHAPADINHA">CHA-CHAPADINHA</option>
+  <option value="ALE ALTO ALEGRE DO MARANHAO">ALE-ALTO ALEGRE DO MARANHAO</option>
+  <option value="MIR MIRANDA DO NORTE">MIR-MIRANDA DO NORTE</option>
+  <option value="TMO TERESINA MOCAMBINHO">TMO-TERESINA MOCAMBINHO-VIGILANTE NOTURNO</option>
+  <option value="BHA BARREIRINHAS">BHA-BARREIRINHAS</option>
+  <option value="TEC TIMON ELETRO E CONFECÇÕES">TEC-TIMON ELETRO E CONFECÇÕES</option>
+  <option value="SPA SÃO JOÃO DOS PATOS">SPA-SÃO JOÃO DOS PATOS</option>
+  <option value="PII PEDRO II">PII PEDRO II</option>
+  <option value="AXA AXIXÁ">AXA-AXIXÁ</option>
+  <option value="ATP ALTO PARNAÍBA">ATP-ALTO PARNAÍBA</option>
+  <option value="LUCAIA TERESINA">LUCAIA-TERESINA</option>
+  <option value="PDM PRESIDENTE MEDICE">PDM-PRESIDENTE MEDICE</option>
+  <option value="CRB CARNAUBEIRAS">CRB-CARNAUBEIRAS</option>
+  <option value="MRO MORROS">MRO-MORROS</option>
+  <option value="PFR PASSAGEM FRANCA">PFR-PASSAGEM FRANCA</option>
+  <option value="BHM BARREIRAS MAGAZINE">BHM-BARREIRAS MAGAZINE</option>
+  <option value="PET PETROLINA">PET-PETROLINA</option>
+  <option value="PDC PETROLINA DEPOSITO FECHADO">PDC-PETROLINA DEPOSITO FECHADO</option>
+  <option value="FLO FLORIANO">FLO-FLORIANO</option>
+  <option value="MEM MANOEL EMIDIO">MEM-MANOEL EMIDIO</option>
+  <option value="DPI DEPOSITO DE PINHEIRO">DPI-DEPOSITO DE PINHEIRO</option>
+  <option value="CLT COLINAS DO TOCANTINS">CLT-COLINAS DO TOCANTINS</option>
+  <option value="TUD TUTOIA">TUD-TUTOIA</option>
+  <option value="DCO DEPOSITO COLINAS">DCO-DEPOSITO COLINAS</option>
+  <option value="CTL CRISTALÂNDIA DO PIAUÍ">CTL-CRISTALÂNDIA DO PIAUÍ</option>
+  <option value="BCA BACABEIRA">BCA-BACABEIRA</option>
+  <option value="SHE SANTA HELENA">SHE-SANTA HELENA</option>
+  <option value="GUM BOA VISTA DO GURUPÍ">GUM-BOA VISTA DO GURUPÍ</option>
+  <option value="CRI CRISTÓPOLIS">CRI-CRISTÓPOLIS</option>
+  <option value="MRA MATA ROMA">MRA-MATA ROMA</option>
+  <option value="SJC SÃO JOAO DO CARU">SJC-SÃO JOAO DO CARU</option>
+  <option value="PIX PIO IX">PIX-PIO IX</option>
+  <option value="PBO PASTOS BONS">PBO-PASTOS BONS</option>
+  <option value="APA APICUM-AÇU">APA-APICUM-AÇU</option>
+  <option value="SER SERRANO DO MARANHÃO">SER-SERRANO DO MARANHÃO</option>
+  <option value="MIZ MIRINZAL">MIZ-MIRINZAL</option>
+  <option value="CED CEDRAL">CED-CEDRAL</option>
+  <option value="POM PORTO RICO DO MARANHÃO">POM-PORTO RICO DO MARANHÃO</option>
+  <option value="PAU PAULISTANA">PAU-PAULISTANA</option>
+  <option value="GUI GUIMARÃES">GUI-GUIMARÃES</option>
+  <option value="BEQ BEQUIMÃO">BEQ-BEQUIMÃO</option>
+  <option value="CME CÂNDIDO MENDES">CME-CÂNDIDO MENDES</option>
+  <option value="CEN CENTRAL DO MARANHÃO">CEN-CENTRAL DO MARANHÃO</option>
+  <option value="TRF TRES FUROS">TRF-TRES FUROS</option>
+  <option value="PSA PRESIDENTE SARNEY">PSA-PRESIDENTE SARNEY</option>
+  <option value="BCB BACURITUBA">BCB-BACURITUBA</option>
+  <option value="SJB SÃO JOÃO BATISTA">SJB-SÃO JOÃO BATISTA</option>
+  <option value="ALC ALCÂNTARA">ALC-ALCÂNTARA</option>
+  <option value="SVF SÃO VICENTE DE FERRER">SVF-SÃO VICENTE DE FERRER</option>
+  <option value="PME PALMEIRANDIA">PME-PALMEIRANDIA</option>
+  <option value="PAS PARAISO">PAS-PARAISO</option>
+  <option value="BRE BREJO">BRE-BREJO</option>
+  <option value="TUR TURIAÇÚ">TUR-TURIAÇÚ</option>
+  <option value="LDO LUÍS DOMINGUES">LDO-LUÍS DOMINGUES</option>
+  <option value="PDA ASSISTENCIA PEDREIRAS">PDA-ASSISTENCIA PEDREIRAS</option>
+  <option value="IPM IGARAPÉ DO MEIO">IPM-IGARAPÉ DO MEIO</option>
+  <option value="PTO PARAÍSO DO TOCANTINS">PTO-PARAÍSO DO TOCANTINS</option>
+  <option value="ITI ITAINÓPOLIS">ITI-ITAINÓPOLIS</option>
+  <option value="JAI JAICÓS">JAI-JAICÓS</option>
+  <option value="CDF CODO MERCADO">CDF-CODO MERCADO-MA-VIGILANTE NOTURNO</option>
+  <option value="ARP ARARIPINA">ARP-ARARIPINA</option>
+  <option value="SJA SÃO JOÃO DO ARRAIAL">SJA-SÃO JOÃO DO ARRAIAL</option>
+  <option value="BDC BODOCÓ">BDC-BODOCÓ</option>
+  <option value="BUB BURITÍ BRAVO">BUB-BURITÍ BRAVO</option>
+  <option value="TOC TOCANTINÓPOLIS">TOC-TOCANTINÓPOLIS</option>
+  <option value="DZE DEPOSITO DE ZE DOCA">DZE DEPOSITO DE ZE DOCA-MA</option>
+  <option value="ENC ENCRUZO (GOV.NUNES FREIRE">ENC-ENCRUZO (GOV.NUNES FREIRE</option>
+  <option value="SLP SANTA LUZIA DO PARUÁ">SLP-SANTA LUZIA DO PARUÁ</option>
+  <option value="PLA PILÃO ARCADO">PLA-PILÃO ARCADO</option>
+  <option value="SNA SANTANA DO SOBRADO">SNA-SANTANA DO SOBRADO</option>
+  <option value="PMI PINDARE-MIRIM">PMI-PINDARE-MIRIM-MA</option>
+  <option value="SFI SANTA FILOMENA">SFI-SANTA FILOMENA</option>
+  <option value="LOJAO TERESINA">LOJAO TERESINA-VIGILANTE NOTURNO</option>
+  <option value="ARD ARARIPINA">ARD-ARARIPINA</option>
+  <option value="BJT BOM JESUS DO TOCANTIMS">BJT-BOM JESUS DO TOCANTIMS</option>
+  <option value="ANJ ANAJATUBA">ANJ-ANAJATUBA</option>
+  <option value="BFP BOMFIM DO PIAUI">BFP-BOMFIM DO PIAUI</option>
+  <option value="SMV SANTA MARIA DA VITORIA">SMV-SANTA MARIA DA VITORIA</option>
+  <option value="SDE SÃO DESIDÉRIO">SDE-SÃO DESIDÉRIO</option>
+</select>
+
+    <label for="tipoOcorrencia">Tipo de Ocorrência:</label>
+    <select id="tipoOcorrencia">
+      <option value="Alarme Disparado">Alarme Disparado</option>
+      <option value="Alarme Inativo">Alarme Inativo</option>
+      <option value="Perda de Sinal/ Comunicação">Perda de Sinal/ Comunicação</option>
+      <option value="Atividade Suspeita">Atividade Suspeita</option>
+      <option value="Queda de Conexão IP">Queda de Conexão IP</option>
+    </select>
+
+    <label for="status">Status:</label>
+    <select id="status">
+      <option value="Sem alteração">Sem alteração</option>
+      <option value="Com alteração">Com alteração</option>
+    </select>
+
+    <div class="buttons">
+      <button type="button" class="btn-primary" onclick="gerarOcorrencia()">Gerar Ocorrência</button>
+      <button type="button" class="btn-whatsapp" onclick="compartilharWhatsApp()">Compartilhar no WhatsApp</button>
+      <button type="button" class="btn-primary" onclick="exportarParaExcel('tabelaOcorrencias', 'ocorrencias')">Exportar para Excel</button>
+    </div>
+  </form>
+
+  <div id="ocorrenciasGeradas"></div>
+
+  <table id="tabelaOcorrencias">
+    <thead>
+      <tr>
+        <th>Número</th>
+        <th>Remetente</th>
+        <th>Data/Hora</th>
+        <th>Local Monitorado</th>
+        <th>Tipo de Ocorrência</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Linhas serão adicionadas aqui -->
+    </tbody>
+  </table>
+
+  <script>
+    function fillCurrentDateTime() {
+      const now = new Date();
+      const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+      document.getElementById("dataHora").value = local.toISOString().slice(0, 16);
+    }
+
+    function gerarNumeroOcorrencia() {
+      const aleatorio = Math.floor(100000 + Math.random() * 900000);
+      return `2025-${aleatorio}`;
+    }
+
+    function gerarMensagem(remetente, dataHora, local, tipo, status, numero) {
+      return `CENTRAL DE OPERAÇÃO
+
+Remetente: ${remetente}
+Data/Hora: ${dataHora}
+Local Monitorado: ${local}
+Tipo de Ocorrência: ${tipo}
+Status: ${status}
+Número da Ocorrência: ${numero}`;
+    }
+
+    function salvarOcorrenciasNoStorage(ocorrencias) {
+      sessionStorage.setItem("ocorrencias", JSON.stringify(ocorrencias));
+    }
+
+    function carregarOcorrenciasDoStorage() {
+      const dadosSalvos = sessionStorage.getItem("ocorrencias");
+      if (!dadosSalvos) return;
+
+      const ocorrencias = JSON.parse(dadosSalvos);
+      ocorrencias.forEach(({ numero, remetente, dataHora, local, tipo, status }) => {
+        adicionarLinhaTabela({ numero, remetente, dataHora, local, tipo, status });
+
+        const mensagem = gerarMensagem(remetente, dataHora, local, tipo, status, numero);
+        const ocorrenciaDiv = document.createElement("div");
+        ocorrenciaDiv.className = "ocorrencia";
+        ocorrenciaDiv.innerHTML = `
+          <p><strong>Remetente:</strong> ${remetente}</p>
+          <p><strong>Data/Hora:</strong> ${dataHora}</p>
+          <p><strong>Local Monitorado:</strong> ${local}</p>
+          <p><strong>Tipo de Ocorrência:</strong> ${tipo}</p>
+          <p><strong>Status:</strong> ${status}</p>
+          <p><strong>Número:</strong> ${numero}</p>
+          <button class="btn-copy" onclick="copiarParaClipboard(\`${mensagem}\`)">Copiar Ocorrência</button>
+        `;
+        document.getElementById("ocorrenciasGeradas").appendChild(ocorrenciaDiv);
+      });
+
+      if (ocorrencias.length > 0) {
+        document.getElementById("tabelaOcorrencias").style.display = "table";
+      }
+    }
+
+    function gerarOcorrencia() {
+      const remetente = document.getElementById("remetente").value;
+      const dataHora = document.getElementById("dataHora").value.replace("T", " ");
+      const local = document.getElementById("local").value || "Não informado";
+      const tipo = document.getElementById("tipoOcorrencia").value;
+      const status = document.getElementById("status").value;
+      const numero = gerarNumeroOcorrencia();
+
+      const mensagem = gerarMensagem(remetente, dataHora, local, tipo, status, numero);
+
+      const ocorrenciaDiv = document.createElement("div");
+      ocorrenciaDiv.className = "ocorrencia";
+      ocorrenciaDiv.innerHTML = `
+        <p><strong>Remetente:</strong> ${remetente}</p>
+        <p><strong>Data/Hora:</strong> ${dataHora}</p>
+        <p><strong>Local Monitorado:</strong> ${local}</p>
+        <p><strong>Tipo de Ocorrência:</strong> ${tipo}</p>
+        <p><strong>Status:</strong> ${status}</p>
+        <p><strong>Número:</strong> ${numero}</p>
+        <button class="btn-copy" onclick="copiarParaClipboard(\`${mensagem}\`)">Copiar Ocorrência</button>
+      `;
+
+      document.getElementById("ocorrenciasGeradas").appendChild(ocorrenciaDiv);
+      window.ultimoMensagem = mensagem;
+
+      adicionarLinhaTabela({ numero, remetente, dataHora, local, tipo, status });
+
+      // Salvar no sessionStorage
+      const ocorrenciasAnteriores = JSON.parse(sessionStorage.getItem("ocorrencias")) || [];
+      ocorrenciasAnteriores.push({ numero, remetente, dataHora, local, tipo, status });
+      salvarOcorrenciasNoStorage(ocorrenciasAnteriores);
+
+      // Exibe a tabela se estiver oculta
+      const tabela = document.getElementById("tabelaOcorrencias");
+      if (tabela.style.display === "none") {
+        tabela.style.display = "table";
+      }
+
+      document.getElementById("local").value = "";
+      fillCurrentDateTime();
+    }
+
+    function adicionarLinhaTabela({ numero, remetente, dataHora, local, tipo, status }) {
+      const tbody = document.querySelector("#tabelaOcorrencias tbody");
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${numero}</td>
+        <td>${remetente}</td>
+        <td>${dataHora}</td>
+        <td>${local}</td>
+        <td>${tipo}</td>
+        <td>${status}</td>
+      `;
+
+      tbody.appendChild(tr);
+    }
+
+    function compartilharWhatsApp() {
+      const mensagem = window.ultimoMensagem || "Nenhuma ocorrência gerada ainda.";
+      const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, "_blank");
+    }
+
+    function copiarParaClipboard(mensagem) {
+      navigator.clipboard.writeText(mensagem).then(function () {
+        alert("Mensagem copiada para a área de transferência.");
+      }, function (err) {
+        console.error('Erro ao copiar para a área de transferência: ', err);
+      });
+    }
+
+    function exportarParaExcel(idTabela, nomeArquivo = 'dados') {
+      const tabela = document.getElementById(idTabela);
+      const htmlTabela = tabela.outerHTML;
+
+      const arquivoExcel = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office"
+              xmlns:x="urn:schemas-microsoft-com:office:excel"
+              xmlns="http://www.w3.org/TR/REC-html40">
+          <head>
+            <!--[if gte mso 9]>
+            <xml>
+              <x:ExcelWorkbook>
+                <x:ExcelWorksheets>
+                  <x:ExcelWorksheet>
+                    <x:Name>${nomeArquivo}</x:Name>
+                    <x:WorksheetOptions>
+                      <x:DisplayGridlines/>
+                    </x:WorksheetOptions>
+                  </x:ExcelWorksheet>
+                </x:ExcelWorksheets>
+              </x:ExcelWorkbook>
+            </xml>
+            <![endif]-->
+          </head>
+          <body>
+            ${htmlTabela}
+          </body>
+        </html>
+      `;
+
+      const blob = new Blob([arquivoExcel], { type: 'application/vnd.ms-excel' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${nomeArquivo}.xls`;
+      link.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+    // Inicializa data e carrega ocorrências armazenadas da sessão
+    fillCurrentDateTime();
+    carregarOcorrenciasDoStorage();
+  </script>
+</body>
+</html>
