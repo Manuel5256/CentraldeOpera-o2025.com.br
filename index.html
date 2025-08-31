@@ -1,19 +1,22 @@
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;pt-BR&quot;&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;UTF-8&quot; /&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot; /&gt;
-  &lt;title&gt;Central de Opera&ccedil;&atilde;o - Grupo Claudino&lt;/title&gt;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Central de Operação - Grupo Claudino</title>
 
-  &lt;!-- Choices.js CSS para select com busca --&gt;
-  &lt;link
-    rel=&quot;stylesheet&quot;
-    href=&quot;https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css&quot;
-  /&gt;
+  <!-- Choices.js CSS para select com busca -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+  />
 
-  &lt;style&gt;
+  <style>
     /* Reset e base */
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f0f4f8;
@@ -25,9 +28,10 @@
       flex-direction: column;
       align-items: center;
     }
+
     header {
       width: 100%;
-      background-color: #0a3d91;
+      background-color: #0a3d91; /* azul Grupo Claudino */
       padding: 20px 0;
       border-radius: 0 0 15px 15px;
       box-shadow: 0 3px 8px rgb(10 61 145 / 0.4);
@@ -38,6 +42,7 @@
       user-select: none;
       letter-spacing: 1.2px;
     }
+
     main {
       background-color: white;
       max-width: 750px;
@@ -47,6 +52,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 15px rgb(10 61 145 / 0.15);
     }
+
     label {
       display: block;
       font-weight: 600;
@@ -54,7 +60,9 @@
       font-size: 1.2rem;
       color: #0a3d91;
     }
-    input[type=&quot;text&quot;],
+
+    input[type="text"],
+    input[type="datetime-local"],
     select,
     .choices__inner {
       width: 100%;
@@ -63,169 +71,1103 @@
       margin-top: 6px;
       border-radius: 6px;
       border: 1.8px solid #0a3d91;
+      transition: border-color 0.3s ease;
+      font-family: inherit;
     }
-    input[readonly] { background-color: #e9f0fc; color: #555; }
-    .radio-group { margin-top: 10px; display: flex; gap: 20px; align-items: center; }
-    .buttons { margin-top: 30px; display: flex; gap: 15px; }
+
+    input[readonly] {
+      background-color: #e9f0fc;
+      color: #555;
+      cursor: default;
+    }
+
+    input[type="text"]:focus,
+    input[type="datetime-local"]:focus,
+    select:focus,
+    .choices__inner.is-focused {
+      outline: none;
+      border-color: #004aab;
+      box-shadow: 0 0 8px #004aab88;
+    }
+
+    .radio-group {
+      margin-top: 10px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .radio-group input[type="radio"] {
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+
+    .radio-group label {
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #0a3d91;
+      cursor: pointer;
+    }
+
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
     button {
-      flex: 1; min-width: 150px; padding: 14px 20px;
-      font-size: 1.15rem; font-weight: 700;
-      border: none; border-radius: 8px; cursor: pointer;
+      flex: 1;
+      min-width: 150px;
+      padding: 14px 20px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background-color: #0a3d91;
+    }
+    .btn-primary:hover {
+      background-color: #004aab;
+    }
+
+    .btn-whatsapp {
+      background-color: #25d366;
       color: white;
     }
-    .btn-primary { background-color: #0a3d91; }
-    .btn-whatsapp { background-color: #25d366; }
-    .btn-export { background-color: #1774e1; }
-    #ocorrenciasGeradas { margin-top: 40px; max-height: 350px; overflow-y: auto; }
-    .ocorrencia { background: #e6f0fc; border-radius: 8px; padding: 16px 20px; margin-bottom: 20px; }
-    #tabelaOcorrencias { margin-top: 40px; width: 100%; border-collapse: collapse; display: none; }
-    #tabelaOcorrencias th, #tabelaOcorrencias td { border: 1px solid #0a3d91; padding: 10px; }
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;header&gt;
-    CENTRAL DE OPERA&Ccedil;&Atilde;O - GRUPO CLAUDINO
-  &lt;/header&gt;
+    .btn-whatsapp:hover {
+      background-color: #1da851;
+    }
 
-  &lt;main&gt;
-    &lt;form id=&quot;ocorrenciaForm&quot; autocomplete=&quot;off&quot;&gt;
-      &lt;label for=&quot;remetente&quot;&gt;Remetente:&lt;/label&gt;
-      &lt;input type=&quot;text&quot; id=&quot;remetente&quot; value=&quot;Central de Opera&ccedil;&otilde;es&quot; readonly /&gt;
+    .btn-export {
+      background-color: #1774e1;
+    }
+    .btn-export:hover {
+      background-color: #0f55b7;
+    }
 
-      &lt;label for=&quot;dataHora&quot;&gt;Data/Hora:&lt;/label&gt;
-      &lt;input type=&quot;text&quot; id=&quot;dataHora&quot; readonly /&gt;
+    #ocorrenciasGeradas {
+      margin-top: 40px;
+      max-height: 350px;
+      overflow-y: auto;
+      border-left: 5px solid #0a3d91;
+      padding-left: 18px;
+    }
 
-      &lt;!-- Container para Local Monitorado --&gt;
-      &lt;div id=&quot;localMonitoradoContainer&quot;&gt;
-        &lt;span&gt;Local Monitorado: &lt;span id=&quot;numeroLojas&quot;&gt;0&lt;/span&gt;&lt;/span&gt;
-        &lt;select id=&quot;localMonitorado&quot; name=&quot;localMonitorado&quot;&gt;
-          &lt;option value=&quot;CDM CODO MERCADO CENTRAL&quot;&gt;CDM-CODO MERCADO CENTRAL&lt;/option&gt;
-          &lt;option value=&quot;TIN TIMBIRAS&quot;&gt;TIN-TIMBIRAS&lt;/option&gt;
-          &lt;option value=&quot;SDE S&Atilde;O DESID&Eacute;RIO&quot;&gt;SDE-S&Atilde;O DESID&Eacute;RIO&lt;/option&gt;
-        &lt;/select&gt;
-      &lt;/div&gt;
+    .ocorrencia {
+      background: #e6f0fc;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgb(10 61 145 / 0.15);
+      font-size: 1.1rem;
+      color: #0a3d91;
+    }
 
-      &lt;label for=&quot;tipoOcorrencia&quot;&gt;Tipo de Ocorr&ecirc;ncia:&lt;/label&gt;
-      &lt;select id=&quot;tipoOcorrencia&quot; name=&quot;tipoOcorrencia&quot;&gt;
-        &lt;option value=&quot;Alarme Disparado&quot;&gt;Alarme Disparado&lt;/option&gt;
-        &lt;option value=&quot;Alarme Inativo&quot;&gt;Alarme Inativo&lt;/option&gt;
-      &lt;/select&gt;
+    .ocorrencia p {
+      margin: 5px 0;
+    }
 
-      &lt;label for=&quot;status&quot;&gt;Status:&lt;/label&gt;
-      &lt;select id=&quot;status&quot; name=&quot;status&quot;&gt;
-        &lt;option value=&quot;Sem altera&ccedil;&atilde;o&quot;&gt;Sem altera&ccedil;&atilde;o&lt;/option&gt;
-        &lt;option value=&quot;Com altera&ccedil;&atilde;o&quot;&gt;Com altera&ccedil;&atilde;o&lt;/option&gt;
-      &lt;/select&gt;
+    .btn-copy {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+      user-select: none;
+    }
+    .btn-copy:hover {
+      background-color: #565e64;
+    }
 
-      &lt;label&gt;Tem Imagem?&lt;/label&gt;
-      &lt;div class=&quot;radio-group&quot;&gt;
-        &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;temImagem&quot; value=&quot;Sim&quot; checked /&gt; Sim&lt;/label&gt;
-        &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;temImagem&quot; value=&quot;N&atilde;o&quot; /&gt; N&atilde;o&lt;/label&gt;
-      &lt;/div&gt;
+    #tabelaOcorrencias {
+      margin-top: 40px;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+      display: none;
+      box-shadow: 0 4px 10px rgb(10 61 145 / 0.2);
+    }
 
-      &lt;div class=&quot;buttons&quot;&gt;
-        &lt;button type=&quot;button&quot; class=&quot;btn-primary&quot; onclick=&quot;gerarOcorrencia()&quot;&gt;Gerar Ocorr&ecirc;ncia&lt;/button&gt;
-        &lt;button type=&quot;button&quot; class=&quot;btn-whatsapp&quot; onclick=&quot;compartilharWhatsApp()&quot;&gt;Compartilhar no WhatsApp&lt;/button&gt;
-        &lt;button type=&quot;button&quot; class=&quot;btn-export&quot; onclick=&quot;exportarParaExcel('tabelaOcorrencias', 'ocorrencias')&quot;&gt;Exportar Excel&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/form&gt;
+    #tabelaOcorrencias th,
+    #tabelaOcorrencias td {
+      border: 1px solid #0a3d91;
+      padding: 10px 14px;
+      text-align: center;
+      color: #0a3d91;
+    }
 
-    &lt;div id=&quot;ocorrenciasGeradas&quot;&gt;&lt;/div&gt;
+    #tabelaOcorrencias thead tr {
+      background-color: #0a3d91;
+      color: white;
+      font-weight: 700;
+    }
 
-    &lt;table id=&quot;tabelaOcorrencias&quot;&gt;
-      &lt;thead&gt;
-        &lt;tr&gt;
-          &lt;th&gt;N&uacute;mero&lt;/th&gt;
-          &lt;th&gt;Remetente&lt;/th&gt;
-          &lt;th&gt;Data/Hora&lt;/th&gt;
-          &lt;th&gt;Local&lt;/th&gt;
-          &lt;th&gt;Ocorr&ecirc;ncia&lt;/th&gt;
-          &lt;th&gt;Status&lt;/th&gt;
-          &lt;th&gt;Imagem&lt;/th&gt;
-        &lt;/tr&gt;
-      &lt;/thead&gt;
-      &lt;tbody&gt;&lt;/tbody&gt;
-    &lt;/table&gt;
-  &lt;/main&gt;
+    footer {
+      margin-top: auto;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 15px 10px;
+      color: #666;
+      border-top: 1px solid #ddd;
+      user-select: none;
+    }
 
-  &lt;footer&gt;&amp;copy; 2025 Central de Opera&ccedil;&atilde;o&lt;/footer&gt;
+    /* Novo estilo para container Local Monitorado com número ao lado */
+    #localMonitoradoContainer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      font-weight: 700;
+      color: #0a3d91;
+      font-size: 1.2rem;
+    }
 
-  &lt;script&gt;
+    #localMonitorado {
+      flex: 1;
+      padding: 12px 15px;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      border: 1.8px solid #0a3d91;
+      font-family: inherit;
+      margin-top: 0; /* remove margin top para ficar na mesma linha */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    CENTRAL DE OPERAÇÃO - GRUPO CLAUDINO
+  </header>
+
+  <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Central de Operação - Grupo Claudino</title>
+
+  <!-- Choices.js CSS para select com busca -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+  />
+
+  <style>
+    /* Reset e base */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0 15px 50px;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background-color: #0a3d91; /* azul Grupo Claudino */
+      padding: 20px 0;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 3px 8px rgb(10 61 145 / 0.4);
+      text-align: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.8rem;
+      user-select: none;
+      letter-spacing: 1.2px;
+    }
+
+    main {
+      background-color: white;
+      max-width: 750px;
+      width: 100%;
+      margin-top: 30px;
+      padding: 25px 35px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgb(10 61 145 / 0.15);
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 18px;
+      font-size: 1.2rem;
+      color: #0a3d91;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    select,
+    .choices__inner {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 1.1rem;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1.8px solid #0a3d91;
+      transition: border-color 0.3s ease;
+      font-family: inherit;
+    }
+
+    input[readonly] {
+      background-color: #e9f0fc;
+      color: #555;
+      cursor: default;
+    }
+
+    input[type="text"]:focus,
+    input[type="datetime-local"]:focus,
+    select:focus,
+    .choices__inner.is-focused {
+      outline: none;
+      border-color: #004aab;
+      box-shadow: 0 0 8px #004aab88;
+    }
+
+    .radio-group {
+      margin-top: 10px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .radio-group input[type="radio"] {
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+
+    .radio-group label {
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: #0a3d91;
+      cursor: pointer;
+    }
+
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    button {
+      flex: 1;
+      min-width: 150px;
+      padding: 14px 20px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background-color: #0a3d91;
+    }
+    .btn-primary:hover {
+      background-color: #004aab;
+    }
+
+    .btn-whatsapp {
+      background-color: #25d366;
+      color: white;
+    }
+    .btn-whatsapp:hover {
+      background-color: #1da851;
+    }
+
+    .btn-export {
+      background-color: #1774e1;
+    }
+    .btn-export:hover {
+      background-color: #0f55b7;
+    }
+
+    #ocorrenciasGeradas {
+      margin-top: 40px;
+      max-height: 350px;
+      overflow-y: auto;
+      border-left: 5px solid #0a3d91;
+      padding-left: 18px;
+    }
+
+    .ocorrencia {
+      background: #e6f0fc;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgb(10 61 145 / 0.15);
+      font-size: 1.1rem;
+      color: #0a3d91;
+    }
+
+    .ocorrencia p {
+      margin: 5px 0;
+    }
+
+    .btn-copy {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+      user-select: none;
+    }
+    .btn-copy:hover {
+      background-color: #565e64;
+    }
+
+    #tabelaOcorrencias {
+      margin-top: 40px;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+      display: none;
+      box-shadow: 0 4px 10px rgb(10 61 145 / 0.2);
+    }
+
+    #tabelaOcorrencias th,
+    #tabelaOcorrencias td {
+      border: 1px solid #0a3d91;
+      padding: 10px 14px;
+      text-align: center;
+      color: #0a3d91;
+    }
+
+    #tabelaOcorrencias thead tr {
+      background-color: #0a3d91;
+      color: white;
+      font-weight: 700;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 15px 10px;
+      color: #666;
+      border-top: 1px solid #ddd;
+      user-select: none;
+    }
+
+    /* Novo estilo para container Local Monitorado com número ao lado */
+    #localMonitoradoContainer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      font-weight: 700;
+      color: #0a3d91;
+      font-size: 1.2rem;
+    }
+
+    #localMonitorado {
+      flex: 1;
+      padding: 12px 15px;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      border: 1.8px solid #0a3d91;
+      font-family: inherit;
+      margin-top: 0; /* remove margin top para ficar na mesma linha */
+    }
+  </style>
+</head>
+<body>
+  <header>
+    CENTRAL DE OPERAÇÃO - GRUPO CLAUDINO
+  </header>
+
+  <main>
+    <form id="ocorrenciaForm" autocomplete="off">
+      <label for="remetente">Remetente:</label>
+      <input type="text" id="remetente" value="Central de Operações" readonly />
+
+      <label for="dataHora">Data/Hora:</label>
+      <input type="text" id="dataHora" readonly />
+
+      <!-- Container para Local Monitorado com número -->
+      <div id="localMonitoradoContainer">
+        <span>Local Monitorado: <span id="numeroLojas">0</span></span>
+        <select id="localMonitorado" name="localMonitorado" placeholder="Pesquisar local monitorado...">
+          <option value="CDM CODO MERCADO CENTRAL">CDM-CODO MERCADO CENTRAL</option>
+<option value="BHA BARREIRINHAS">BHA-BARREIRINHAS</option>
+<option value="SAG SAO GONÇALO DO PIAUI">SAG-SAO GONÇALO DO PIAUI</option>
+<option value="SRT SERRITA">SRT-SERRITA</option>
+<option value="VIF VITORINO FREIRE">VIF-VITORINO FREIRE</option>
+<option value="LVE LAGO VERDE">LVE-LAGO VERDE</option>
+<option value="CJA CAJAPIO">CJA-CAJAPIO</option>
+<option value="DRM DORMENTES">DRM-DORMENTES</option>
+<option value="BDA BREJO DE AREIA">BDA-BREJO DE AREIA</option>
+<option value="ODC-D'GUA DAS CUNHÃS">ODC-D'GUA DAS CUNHÃS</option>
+  <option value="TIN TIMBIRAS">TIN-TIMBIRAS</option>
+  <option value="CTZ COROATA TRIZIDELA">CTZ-COROATA TRIZIDELA</option>
+  <option value="BOP BOQUEIRAO DO PIAUI">BOP BOQUEIRAO DO PIAUI</option>
+  <option value="UBS URBANO SANTOS">UBS-URBANO SANTOS</option>
+  <option value="HBC HUMBERTO DE CAMPOS">HBC-HUMBERTO DE CAMPOS</option>
+  <option value="SMR SANTO AMARO DO MARANHÃO">SMR-SANTO AMARO DO MARANHÃO</option>
+  <option value="TUT TUTOIA">TUT-TUTOIA</option>
+  <option value="ANG ANGICAL DO PIAUI">ANG ANGICAL DO PIAUI</option>
+  <option value="CNB CANA BRAVA">CNB-CANA BRAVA</option>
+  <option value="PLN PAULINO NEVES">PLN-PAULINO NEVES</option>
+  <option value="VAG VARGEM GRANDE">VAG-VARGEM GRANDE</option>
+  <option value="PLT PALESTINA">PLT-PALESTINA</option>
+  <option value="ROS ROSÁRIO">ROS-ROSÁRIO</option>
+  <option value="ICT ICATU">ICT-ICATU</option>
+  <option value="SRI SANTA RITA">SRI-SANTA RITA</option>
+  <option value="ALA ALDEIAS ALTAS">ALA-ALDEIAS ALTAS</option>
+  <option value="MTS MATÕES">MTS-MATÕES</option>
+  <option value="SJE SÃO JOÃO DO SOTER">SJE-SÃO JOÃO DO SOTER</option>
+  <option value="LCU CONCEIÇÃO DO LAGO AÇÚ">LCU-CONCEIÇÃO DO LAGO AÇÚ</option>
+  <option value="PIP PIRAPEMAS">PIP-PIRAPEMAS</option>
+  <option value="SAM SÃO MATEUS DO MARANHÃO">SAM-SÃO MATEUS DO MARANHÃO</option>
+  <option value="SLG SÃO LUIS GONZAGA DO MARANHÃO">SLG-SÃO LUIS GONZAGA DO MARANHÃO</option>
+  <option value="SLZ SANTA LUZIA DO TIDE">SLZ-SANTA LUZIA DO TIDE</option>
+  <option value="MON MONÇÃO">MON-MONÇÃO</option>
+  <option value="BCU BURITICUPU-LOJA">BCU-BURITICUPU-LOJA</option>
+  <option value="MAS MARACAÇUMÉ">MAS-MARACAÇUMÉ</option>
+  <option value="AGN ARAGUANÃ">AGN-ARAGUANÃ</option>
+  <option value="CTP CARUTAPERA">CTP-CARUTAPERA-VIGILANTE NOTURNO</option>
+  <option value="GDV GODOFREDO VIANA">GDV-GODOFREDO VIANA</option>
+  <option value="SPB SÃO PEDRO DA ÁGUA BRANCA">SPB-SÃO PEDRO DA ÁGUA BRANCA</option>
+  <option value="SFB SÃO FRANCISCO DO BREJÃO">SFB-SÃO FRANCISCO DO BREJÃO</option>
+  <option value="ART ARAGUATINS">ART-ARAGUATINS</option>
+  <option value="STN SITIO NOVO DO TOCANTINS">STN-SITIO NOVO DO TOCANTINS</option>
+  <option value="PNE PRAIA NORTE">PNE-PRAIA NORTE</option>
+  <option value="SPT SAMPAIO">SPT-SAMPAIO</option>
+  <option value="COA CONCEIÇÃO DO ARAUGUAIA">COA-CONCEIÇÃO DO ARAUGUAIA</option>
+  <option value="ABR AGUA BRANCA">ABR-AGUA BRANCA</option>
+  <option value="AMA AMARANTE-PI">AMA-AMARANTE-PI</option>
+  <option value="BDR BARRO DURO">BDR-BARRO DURO</option>
+  <option value="DLB DEMERVAL LOBÃO">DLB-DEMERVAL LOBÃO</option>
+  <option value="MGL MONSENHOR GIL">MGL-MONSENHOR GIL</option>
+  <option value="PAL PALMEIRAIS">PAL-PALMEIRAIS</option>
+  <option value="REG REGENERAÇÃO">REG-REGENERAÇÃO</option>
+  <option value="AGR AGRICOLÂNDIA">AGR-AGRICOLÂNDIA</option>
+  <option value="SPE SÃO PEDRO DO PIAUÍ">SPE-SÃO PEDRO DO PIAUÍ</option>
+  <option value="ALS ALTOS">ALS-ALTOS</option>
+  <option value="ALG ALTO LONGÁ">ALG-ALTO LONGÁ</option>
+  <option value="BNT BENEDITINOS">BNT-BENEDITINOS</option>
+  <option value="NSA NOVO SANTO ANTONIO">NSA-NOVO SANTO ANTONIO</option>
+  <option value="OEI OEIRAS">OEI-OEIRAS</option>
+  <option value="EVL ELESBÃO VELOSO">EVL-ELESBÃO VELOSO</option>
+  <option value="SCP SANTA CRUZ DO PIAUÍ">SCP-SANTA CRUZ DO PIAUÍ</option>
+  <option value="SJP SÃO JOÃO DO PIAUÍ">SJP-SÃO JOÃO DO PIAUÍ</option>
+  <option value="VAL VALENÇA DO PIAUÍ">VAL-VALENÇA DO PIAUÍ</option>
+  <option value="WAF WALL FERRAZ">WAF-WALL FERRAZ</option>
+  <option value="CAM CAMPO MAIOR">CAM-CAMPO MAIOR-VIGIA NOTURNO</option>
+  <option value="CAD CAMPO MAIOR DEPOSITO">CAD-CAMPO MAIOR DEPOSITO-VIGIA NOTURNO</option>
+  <option value="CST CASTELO DO PIAUÍ">CST-CASTELO DO PIAUÍ</option>
+  <option value="JFT JOSÉ DE FREITAS">JFT-JOSÉ DE FREITAS</option>
+  <option value="MIA MIGUEL ALVES">MIA-MIGUEL ALVES</option>
+  <option value="SMT SÃO MIGUEL DO TAPUIO">SMT-SÃO MIGUEL DO TAPUIO</option>
+  <option value="UNI UNIÃO">UNI-UNIÃO</option>
+  <option value="LAL LAGOA ALEGRE">LAL-LAGOA ALEGRE</option>
+  <option value="BHO BOA HORA">BHO-BOA HORA</option>
+  <option value="ARA ARAIOSES">ARA-ARAIOSES</option>
+  <option value="CHV CHAVAL">CHV-CHAVAL</option>
+  <option value="CIM CAMOCIM">CIM-CAMOCIM</option>
+  <option value="COC COCAL">COC-COCAL</option>
+  <option value="JPR JOAQUIM PIRES">JPR-JOAQUIM PIRES</option>
+  <option value="LCO LUIS CORREIA">LCO-LUIS CORREIA</option>
+  <option value="PPM PARNAÍBA PINHEIRO MACHADO">PPM-PARNAÍBA PINHEIRO MACHADO</option>
+  <option value="PIR PIRIPIRI">PIR-PIRIPIRI-VIGILANTE NOTURNO</option>
+  <option value="PID PIRIPIRI DEPOSITO">PID-PIRIPIRI DEPOSITO-VIGILANTE NOTURNO</option>
+  <option value="BAR BARRAS">BAR-BARRAS</option>
+  <option value="ESP ESPERANTINA">ESP-ESPERANTINA</option>
+  <option value="MIO MATIAS OLÍMPIO">MIO-MATIAS OLÍMPIO</option>
+  <option value="PRT PORTO">PRT-PORTO</option>
+  <option value="SBT SÃO BENEDITO">SBT-SÃO BENEDITO</option>
+  <option value="TIA TIANGUÁ">TIA-TIANGUÁ</option>
+  <option value="CCA CAPITÃO DE CAMPOS">CCA-CAPITÃO DE CAMPOS</option>
+  <option value="BBV BACABAL BELA VISTA">BBV-BACABAL BELA VISTA</option>
+  <option value="NSR NOSSA SENHORA DOS REMÉDIOS">NSR-NOSSA SENHORA DOS REMÉDIOS</option>
+  <option value="SFR SÃO FRANCISCO DO MA">SFR SÃO FRANCISCO DO MA</option>
+  <option value="SJS SÃO JOÃO DA SERRA">SJS-SÃO JOÃO DA SERRA</option>
+  <option value="CBP CARAÚBAS">CBP-CARAÚBAS</option>
+  <option value="DAV DIRCEU ARCOVERDE">DAV-DIRCEU ARCOVERDE</option>
+  <option value="RGO RIBEIRO GONÇALVES">RGO RIBEIRO GONÇALVES</option>
+  <option value="FLD DEPÓSITO DE FLORIANO">FLD-DEPÓSITO DE FLORIANO-VIGILANTE NOTURNO</option>
+  <option value="TRI TRINDADE">TRI-TRINDADE</option>
+  <option value="OUR OURICURI">OUR-OURICURI</option>
+  <option value="VIC VIÇOSA DO CEARÁ">VIC-VIÇOSA DO CEARÁ</option>
+  <option value="SRN SÃO RAIMUNDO NONATO">SRN-SÃO RAIMUNDO NONATO</option>
+  <option value="RDP REDENÇÃO DO PARA">RDP-REDENÇÃO DO PARA</option>
+  <option value="PMA PADRE MARCOS">PMA-PADRE MARCOS</option>
+  <option value="INH INHUMA">INH-INHUMA</option>
+  <option value="LAB LAGOA DO BARRO">LAB-LAGOA DO BARRO</option>
+  <option value="CAV COCAL DOS ALVES">CAV-COCAL DOS ALVES</option>
+  <option value="SRO SERROLANDIA">SRO-SERROLANDIA</option>
+  <option value="TUN TUNTUM">TUN-TUNTUM</option>
+  <option value="CPP CAMPINAS DO PIAUI">CPP-CAMPINAS DO PIAUI</option>
+  <option value="HUN HUGO NAPOLEAO">HUN-HUGO NAPOLEAO</option>
+  <option value="RGR REDENÇÃO DO GURGUÉIA">RGR-REDENÇÃO DO GURGUÉIA</option>
+  <option value="PEN PENALVA">PEN-PENALVA</option>
+  <option value="PIO PIO XII">PIO-PIO XII</option>
+  <option value="CGT CHEGA TUDO">CGT-CHEGA TUDO</option>
+  <option value="AFC AFONSO CUNHA">AFC-AFONSO CUNHA</option>
+  <option value="SFM SANTA FILOMENA DO MARANHÃO">SFM-SANTA FILOMENA DO MARANHÃO</option>
+  <option value="BVI BELA VISTA DO MARANHÃO">BVI-BELA VISTA DO MARANHÃO</option>
+  <option value="JUA JUAZEIRO">JUA-JUAZEIRO-VIGILANTE NOTURNO</option>
+  <option value="SCV SANTA CRUZ DA VENERADA">SCV-SANTA CRUZ DA VENERADA</option>
+  <option value="NIQ NOVA IORQUE">NIQ-NOVA IORQUE</option>
+  <option value="XIN XINGUARA">XIN-XINGUARA</option>
+  <option value="AMM AMARANTES DO MARANHAO">AMM-AMARANTES DO MARANHAO</option>
+  <option value="ARO AROAZES">ARO AROAZES</option>
+  <option value="PJM PETROLINA JOSÉ E MARIA">PJM-PETROLINA JOSÉ E MARIA</option>
+  <option value="ALE ALTO ALEGRE DO MARANHAO">ALE-ALTO ALEGRE DO MARANHAO</option>
+  <option value="MIR MIRANDA DO NORTE">MIR-MIRANDA DO NORTE</option>
+  <option value="TMO TERESINA MOCAMBINHO">TMO-TERESINA MOCAMBINHO-VIGILANTE NOTURNO</option>
+  <option value="SPA SÃO JOÃO DOS PATOS">SPA-SÃO JOÃO DOS PATOS</option>
+  <option value="PII PEDRO II">PII PEDRO II</option>
+  <option value="AXA AXIXÁ">AXA-AXIXÁ</option>
+  <option value="ATP ALTO PARNAÍBA">ATP-ALTO PARNAÍBA</option>
+  <option value="LUCAIA TERESINA">LUCAIA-TERESINA</option>
+  <option value="PDM PRESIDENTE MEDICE">PDM-PRESIDENTE MEDICE</option>
+  <option value="CRB CARNAUBEIRAS">CRB-CARNAUBEIRAS</option>
+  <option value="MRO MORROS">MRO-MORROS</option>
+  <option value="PFR PASSAGEM FRANCA">PFR-PASSAGEM FRANCA</option>
+  <option value="MEM MANOEL EMIDIO">MEM-MANOEL EMIDIO</option>
+  <option value="CLT COLINAS DO TOCANTINS">CLT-COLINAS DO TOCANTINS</option>
+  <option value="TUD TUTOIA">TUD-TUTOIA</option>
+  <option value="DCO DEPOSITO COLINAS">DCO-DEPOSITO COLINAS</option>
+  <option value="CTL CRISTALÂNDIA DO PIAUÍ">CTL-CRISTALÂNDIA DO PIAUÍ</option>
+  <option value="BCA BACABEIRA">BCA-BACABEIRA</option>
+  <option value="SHE SANTA HELENA">SHE-SANTA HELENA</option>
+  <option value="CRI CRISTÓPOLIS">CRI-CRISTÓPOLIS</option>
+  <option value="MRA MATA ROMA">MRA-MATA ROMA</option>
+  <option value="SJC SÃO JOAO DO CARU">SJC-SÃO JOAO DO CARU</option>
+  <option value="PIX PIO IX">PIX-PIO IX</option>
+  <option value="PBO PASTOS BONS">PBO-PASTOS BONS</option>
+  <option value="APA APICUM-AÇU">APA-APICUM-AÇU</option>
+  <option value="SER SERRANO DO MARANHÃO">SER-SERRANO DO MARANHÃO</option>
+  <option value="MIZ MIRINZAL">MIZ-MIRINZAL</option>
+  <option value="CED CEDRAL">CED-CEDRAL</option>
+  <option value="POM PORTO RICO DO MARANHÃO">POM-PORTO RICO DO MARANHÃO</option>
+  <option value="PAU PAULISTANA">PAU-PAULISTANA</option>
+  <option value="GUI GUIMARÃES">GUI-GUIMARÃES</option>
+  <option value="BEQ BEQUIMÃO">BEQ-BEQUIMÃO</option>
+  <option value="CME CÂNDIDO MENDES">CME-CÂNDIDO MENDES</option>
+  <option value="CEN CENTRAL DO MARANHÃO">CEN-CENTRAL DO MARANHÃO</option>
+  <option value="TRF TRES FUROS">TRF-TRES FUROS</option>
+  <option value="PSA PRESIDENTE SARNEY">PSA-PRESIDENTE SARNEY</option>
+  <option value="BCB BACURITUBA">BCB-BACURITUBA</option>
+  <option value="SJB SÃO JOÃO BATISTA">SJB-SÃO JOÃO BATISTA</option>
+  <option value="ALC ALCÂNTARA">ALC-ALCÂNTARA</option>
+  <option value="SVF SÃO VICENTE DE FERRER">SVF-SÃO VICENTE DE FERRER</option>
+  <option value="PME PALMEIRANDIA">PME-PALMEIRANDIA</option>
+  <option value="PAS PARAISO">PAS-PARAISO</option>
+  <option value="BRE BREJO">BRE-BREJO</option>
+  <option value="JUP JUAZEIRO DO PIAUI">JUP-JUAZEIRO DO PIAUI</option>
+  <option value="TUR TURIAÇÚ">TUR-TURIAÇÚ</option>
+  <option value="BLO BURITI DOS LOPES">BLO-BURITI DOS LOPES</option>
+  <option value="LDO LUÍS DOMINGUES">LDO-LUÍS DOMINGUES</option>
+  <option value="PDA ASSISTENCIA PEDREIRAS">PDA-ASSISTENCIA PEDREIRAS</option>
+  <option value="IPM IGARAPÉ DO MEIO">IPM-IGARAPÉ DO MEIO</option>
+  <option value="PTO PARAÍSO DO TOCANTINS">PTO-PARAÍSO DO TOCANTINS</option>
+  <option value="ITI ITAINÓPOLIS">ITI-ITAINÓPOLIS</option>
+  <option value="JAI JAICÓS">JAI-JAICÓS</option>
+  <option value="CDF CODO MERCADO">CDF-CODO MERCADO-MA-VIGILANTE NOTURNO</option>
+  <option value="ARP ARARIPINA">ARP-ARARIPINA</option>
+  <option value="IMOVEIS NOVOS E USADOS">IMOVEIS-NOVOS E USADOS</option>
+  <option value="GDI GONSALVES DIAS">GDI-GONSALVES DIAS</option>
+  <option value="CUR CURIMATA">CUR-CURIMATA</option>
+  <option value="SAD SAO DOMINGOS DO MARANHAO">SAD-SAO DOMINGOS DO MARANHAO</option>
+  <option value="SJA SÃO JOÃO DO ARRAIAL">SJA-SÃO JOÃO DO ARRAIAL</option>
+  <option value="BDC BODOCÓ">BDC-BODOCÓ</option>
+  <option value="GUM BOA VISTA DO GURUPI">GUM-BOA VISTA DO GURUPI</option>
+  <option value="FMC MERCADO VELHO CENTRO">FMC-MERCADO VELHO CENTRO</option>
+  <option value="BUB BURITÍ BRAVO">BUB-BURITÍ BRAVO</option>
+  <option value="MPO MURICI DOS PORTELAS">MPO-MURICI DOS PORTELAS</option>
+  <option value="TOC TOCANTINÓPOLIS">TOC-TOCANTINÓPOLIS</option>
+  <option value="DZE DEPOSITO DE ZE DOCA">DZE DEPOSITO DE ZE DOCA-MA</option>
+  <option value="ENC ENCRUZO (GOV.NUNES FREIRE">ENC-ENCRUZO (GOV.NUNES FREIRE</option>
+  <option value="COM COLINAS">COM-COLINAS</option>
+  <option value="PCA PARNAIBA CARAMURU">PCA-PARNAIBA CARAMURU</option>
+  <option value="PPE POÇAO DE PEDRAS">PPE POÇAO DE PEDRAS</option>
+  <option value="LUZ LUZILANDIA">LUZ-LUZILANDIA</option>
+  <option value="IGE IGARAPE GRANDE">IGE-IGARAPE GRANDE</option>
+  <option value="FTI FRIGORIFICO">FTI-FRIGORIFICO</option>
+  <option value="DPE DOM PEDRO">DPE DOM PEDRO</option>
+  <option value="SNM-SITIO NOVO DO MARANHAO">SNM-SITIO NOVO DO MARANHAO</option>
+  <option value="PNO PARAIBANO">PNO PARAIBANO</option>
+  <option value="SLP SANTA LUZIA DO PARUÁ">SLP-SANTA LUZIA DO PARUÁ</option>
+  <option value="PLA PILÃO ARCADO">PLA-PILÃO ARCADO</option>
+  <option value="TES-TERESINA SHOPPING">TES-TERESINA SHOPPING</option>
+  <option value="TEZ-ANTIGO PREDIO TAT">TEZ-ANTIGO PREDIO TAT</option>
+  <option value="TIM-LOJA TIMON SEM ZAP">TIM-LOJA TIMON SEM ZAP</option>
+  <option value="TPI-PIÇARREIRA">TPI-PIÇARREIRA</option>
+  <option value="TPP-PAEQUE PIAUI">TPP-PAEQUE PIAUI</option>
+  <option value="TSJ-SAO JOAQUIM">TSJ-SAO JOAQUIM</option>
+  <option value="SNA SANTANA DO SOBRADO">SNA-SANTANA DO SOBRADO</option>
+  <option value="PMI PINDARE MIRIM MA">PMI PINDARE MIRIM MA</option>
+  <option value="SFI SANTA FILOMENA">SFI-SANTA FILOMENA</option>
+  <option value="ENO ESPERANTINOPOLIS">ENO-ESPERANTINOPOLIS</option>
+  <option value="PER PERITORO">PER-PERITORO</option>
+  <option value="VLD-IDELMAR">VLD-IDELMAR</option>
+  <option value="WAD-WANDERLANDIA">WAD-WANDERLANDIA</option>
+  <option value="SJV-SAO JOAO DA VARJOTA">SJV SAO JOAO DA VARJOTA</option> 
+  <option value="SGP-SIGEFREDO PACHECO-PI">SGP-SIGEFREDO PACHECO-PI</option>
+  <option value="PIM PICOS MOVEIS">PIM PICOS MOVEIS</option>
+  <option value="ARD DEPOSITO ARARIPINA">ARD-DEPOSITO ARARIPINA</option>
+  <option value="BJT BOM JESUS DO TOCANTINS">BJT-BOM JESUS DO TOCANTINS</option>
+  <option value="ANJ ANAJATUBA">ANJ-ANAJATUBA</option>
+  <option value="BFP BOMFIM DO PIAUI">BFP-BOMFIM DO PIAUI</option>
+  <option value="SMV SANTA MARIA DA VITORIA">SMV-SANTA MARIA DA VITORIA</option>
+  <option value="SDE SÃO DESIDÉRIO">SDE SÃO-DESIDÉRIO</option>
+        </select>
+      </div>
+
+      <label for="tipoOcorrencia">Tipo de Ocorrência:</label>
+      <select id="tipoOcorrencia" name="tipoOcorrencia">
+        <option value="Alarme Disparado">Alarme Disparado</option>
+        <option value="Alarme Inativo">Alarme Inativo</option>
+        <option value="Perda de Sinal/ Comunicação">Perda de Sinal/ Comunicação</option>
+        <option value="Atividade Suspeita">Atividade Suspeita</option>
+        <option value="Queda de Conexão IP">Queda de Conexão IP</option>
+      </select>
+
+      <label for="status">Status:</label>
+      <select id="status" name="status">
+        <option value="Sem alteração">Sem alteração</option>
+        <option value="Com alteração">Com alteração</option>
+      </select>
+
+      <label>Tem Imagem?</label>
+      <div class="radio-group" id="temImagemGroup">
+        <label><input type="radio" name="temImagem" value="Sim" checked /> Sim</label>
+        <label><input type="radio" name="temImagem" value="Não" /> Não</label>
+      </div>
+
+      <div class="buttons">
+        <button type="button" class="btn-primary" onclick="gerarOcorrencia()">Gerar Ocorrência</button>
+        <button type="button" class="btn-whatsapp" onclick="compartilharWhatsApp()">Compartilhar no WhatsApp</button>
+        <button type="button" class="btn-export" onclick="exportarParaExcel('tabelaOcorrencias', 'ocorrencias')">Exportar para Excel</button>
+      </div>
+    </form>
+
+    <div id="ocorrenciasGeradas"></div>
+
+    <table id="tabelaOcorrencias" style="display:none;">
+      <thead>
+        <tr>
+          <th>Remetente</th>
+          <th>Data/Hora</th>
+          <th>Local Monitorado</th>
+          <th>Tipo de Ocorrência</th>
+          <th>Status</th>
+          <th>Tem Imagem?</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <footer>
+    &copy; 2025 Central de Operação - Todos os direitos reservados.
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+  <script>
+    // Inicialização do Choices.js e data/hora
+    document.addEventListener('DOMContentLoaded', function () {
+      const choices = new Choices('#localMonitorado', {
+        searchEnabled: true,
+        itemSelectText: '',
+        shouldSort: false
+      });
+
+      function atualizarNumeroLojas() {
+        const select = document.getElementById('localMonitorado');
+        const numeroLojas = select.options.length;
+        document.getElementById('numeroLojas').textContent = numeroLojas;
+      }
+
+      atualizarNumeroLojas();
+      atualizarDataHora();
+      setInterval(atualizarDataHora, 1000);
+
+      carregarOcorrenciasDoStorage();
+    });
+
     function atualizarDataHora() {
       const campo = document.getElementById('dataHora');
       const agora = new Date();
-      campo.value = agora.toLocaleString('pt-BR');
+      const dia = String(agora.getDate()).padStart(2, '0');
+      const mes = String(agora.getMonth() + 1).padStart(2, '0');
+      const ano = agora.getFullYear();
+      const hora = String(agora.getHours()).padStart(2, '0');
+      const min = String(agora.getMinutes()).padStart(2, '0');
+      const seg = String(agora.getSeconds()).padStart(2, '0');
+      campo.value = `${dia}/${mes}/${ano} ${hora}:${min}:${seg}`;
     }
-    setInterval(atualizarDataHora, 1000); atualizarDataHora();
 
-    let contador = 0;
     function gerarOcorrencia() {
-      contador++;
       const remetente = document.getElementById('remetente').value;
       const dataHora = document.getElementById('dataHora').value;
-      const local = document.getElementById('localMonitorado').value;
-      const tipo = document.getElementById('tipoOcorrencia').value;
+      const localMonitorado = document.getElementById('localMonitorado').value;
+      const tipoOcorrencia = document.getElementById('tipoOcorrencia').value;
       const status = document.getElementById('status').value;
-      const img = document.querySelector('input[name=&quot;temImagem&quot;]:checked').value;
+      const temImagem = document.querySelector('input[name="temImagem"]:checked').value;
 
-      const div = document.createElement('div');
-      div.className = &quot;ocorrencia&quot;;
-      div.innerHTML = `
-        &lt;p&gt;&lt;strong&gt;N&uacute;mero:&lt;/strong&gt; ${contador}&lt;/p&gt;
-        &lt;p&gt;&lt;strong&gt;Remetente:&lt;/strong&gt; ${remetente}&lt;/p&gt;
-        &lt;p&gt;&lt;strong&gt;Data/Hora:&lt;/strong&gt; ${dataHora}&lt;/p&gt;
-        &lt;p&gt;&lt;strong&gt;Local:&lt;/strong&gt; ${local}&lt;/p&gt;
-        &lt;p&gt;&lt;strong&gt;Ocorr&ecirc;ncia:&lt;/strong&gt; ${tipo}&lt;/p&gt;
-        &lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; ${status}&lt;/p&gt;
-        &lt;p&gt;&lt;strong&gt;Imagem:&lt;/strong&gt; ${img}&lt;/p&gt;
-      `;
-      document.getElementById('ocorrenciasGeradas').appendChild(div);
+      const ocorrencia = {
+        remetente,
+        dataHora,
+        localMonitorado,
+        tipoOcorrencia,
+        status,
+        temImagem
+      };
 
-      const tr = document.createElement('tr');
-      tr.innerHTML = `&lt;td&gt;${contador}&lt;/td&gt;&lt;td&gt;${remetente}&lt;/td&gt;&lt;td&gt;${dataHora}&lt;/td&gt;&lt;td&gt;${local}&lt;/td&gt;&lt;td&gt;${tipo}&lt;/td&gt;&lt;td&gt;${status}&lt;/td&gt;&lt;td&gt;${img}&lt;/td&gt;`;
-      document.querySelector('#tabelaOcorrencias tbody').appendChild(tr);
-      document.getElementById('tabelaOcorrencias').style.display = &quot;table&quot;;
+      salvarOcorracaoNoStorage(ocorrencia);
+      adicionarOcorrenciaNaTela(ocorrencia);
     }
 
-    // 🔹 Compartilhar no WhatsApp (enviar para v&aacute;rios gerentes)
-    function compartilharWhatsApp() {
-      const container = document.getElementById('ocorrenciasGeradas');
-      if (container.children.length === 0) {
-        alert('Nenhuma ocorr&ecirc;ncia gerada para compartilhar!');
-        return;
-      }
+    function salvarOcorracaoNoStorage(ocorrencia) {
+      let lista = JSON.parse(sessionStorage.getItem('ocorrencias')) || [];
+      lista.push(ocorrencia);
+      sessionStorage.setItem('ocorrencias', JSON.stringify(lista));
+    }
 
-      const numerosGerentes = [
-        &quot;5586999998888&quot;, // Gerente 1
-        &quot;5586988887777&quot;, // Gerente 2
-        &quot;5586977776666&quot;  // Gerente 3
-      ];
+    function carregarOcorrenciasDoStorage() {
+      const lista = JSON.parse(sessionStorage.getItem('ocorrencias')) || [];
+      if (lista.length === 0) return;
 
-      const ultima = container.lastElementChild;
-      let texto = '';
-      ultima.querySelectorAll('p').forEach(p =&gt; { texto += p.textContent + '\n'; });
-
-      const textoCodificado = encodeURIComponent(texto.trim());
-      numerosGerentes.forEach(numero =&gt; {
-        const url = `https://wa.me/${numero}?text=${textoCodificado}`;
-        window.open(url, '_blank');
+      lista.forEach(ocorrencia => {
+        adicionarOcorrenciaNaTela(ocorrencia, false);
       });
     }
 
-    function exportarParaExcel(idTabela, nomeArquivo) {
-      const tabela = document.getElementById(idTabela);
-      if (!tabela || tabela.style.display === 'none') {
-        alert(&quot;N&atilde;o h&aacute; dados para exportar!&quot;);
+    function adicionarOcorrenciaNaTela(ocorrencia, scroll = true) {
+      const ocorrenciaDiv = document.createElement('div');
+      ocorrenciaDiv.classList.add('ocorrencia');
+      ocorrenciaDiv.innerHTML = `
+        <p><strong>Remetente:</strong> ${ocorrencia.remetente}</p>
+        <p><strong>Data/Hora:</strong> ${ocorrencia.dataHora}</p>
+        <p><strong>Local Monitorado:</strong> ${ocorrencia.localMonitorado}</p>
+        <p><strong>Tipo de Ocorrência:</strong> ${ocorrencia.tipoOcorrencia}</p>
+        <p><strong>Status:</strong> ${ocorrencia.status}</p>
+        <p><strong>Tem Imagem?</strong> ${ocorrencia.temImagem}</p>
+        <button class="btn-copy" onclick="copiarTexto(this)">Copiar</button>
+      `;
+      document.getElementById('ocorrenciasGeradas').appendChild(ocorrenciaDiv);
+
+      const tbody = document.querySelector('#tabelaOcorrencias tbody');
+      const linha = document.createElement('tr');
+      linha.innerHTML = `
+        <td>${ocorrencia.remetente}</td>
+        <td>${ocorrencia.dataHora}</td>
+        <td>${ocorrencia.localMonitorado}</td>
+        <td>${ocorrencia.tipoOcorrencia}</td>
+        <td>${ocorrencia.status}</td>
+        <td>${ocorrencia.temImagem}</td>
+      `;
+      tbody.appendChild(linha);
+
+      const tabela = document.getElementById('tabelaOcorrencias');
+      if (tabela.style.display === 'none' || tabela.style.display === '') {
+        tabela.style.display = 'table';
+      }
+
+      if(scroll) ocorrenciaDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copiarTexto(botao) {
+      const ocorrenciaDiv = botao.parentElement;
+      let texto = '';
+      ocorrenciaDiv.querySelectorAll('p').forEach(p => {
+        texto += p.textContent + '\n';
+      });
+
+      navigator.clipboard.writeText(texto.trim())
+        .then(() => alert('Texto copiado para a área de transferência!'))
+        .catch(() => alert('Erro ao copiar o texto.'));
+    }
+
+    // Mapa dos locais para números (sem DDD)
+    const numerosGerentes = {
+      "CDM CODO MERCADO CENTRAL": "99999015664",
+       
+      "SMV SANTA MARIA DA VITORIA": "7799811233",     // Julimar Ger
+      "BHA BARREIRINHAS": "9882618588",     // Pereira Gerente 
+      
+      "SAG SAO GONÇALO DO PIAUI": "8694858517",     // SAG FRANCILEIDE Chefe De Exposição
+     "SRT SERRITA": "8781333899",     // Roberto Gerente SRT
+     "VIF VITORINO FREIRE": "9985258525",     // Italo Gerente 
+     "LVE LAGO VERDE": "9985133268",     // ANTERO Gerente
+      "SDE SÃO DESIDÉRIO": "5577998269929",     // JADSON
+      "TIN TIMBIRAS": "99984477013",             // TIN SANDRO
+      "CTZ COROATA TRIZIDELA": "86994950175",   // CTZ NILO MARCIO
+"DRM DORMENTES": "8799944502",     // Janaildo Gerente DRM
+"CJA CAJAPIO": "9870212971",     // Luiz Carlos Gerente de CJA
+"BDA BREJO DE AREIA": "9891351097",     // Antonio GER BDA
+"AGN ARAGUANÃ": "9884164250",     // AGN Josenilson
+
+
+
+
+
+      "ALA ALDEIAS ALTAS": "99985180170",       // paulo henrique
+      "ALC ALCÂNTARA": "98985009553",             // ALC EDINALDO
+      "ALE ALTO ALEGRE DO MARANHAO": "99985480168",             // ISMAEL
+      "ALG ALTO LONGÁ": "86981152630",            // ALG SA LEONICE
+      "ALS ALTOS": "86999214187",                 // ALS JOÃO BATISTA
+      "AMA AMARANTE": "86998181682",             // AMA LUIZ ANTÔNIO
+      "AMM AMARANTES DO MARANHAO": "99984016656", // AMM RONALDO
+      "ANG ANGICAL DO PIAUI": "86995618573",      // ANG RONALDO
+      "ANJ ANAJATUBA": "98984774743",             // ANJ JOBERTH
+      "APA APICUM-AÇU": "98985685837",            // APA PATRÍCIA
+      "ARA ARAIOSES": "9899628220",              // ARA RODRIGO
+      "ARD DEPOSITO ARARIPINA": "8791848499",     // ARD FERNANDO
+      "ARO AROAZES": "8999879240",                // ARO ODIMAR
+      "ARP ARARIPINA": "89994050289",         // ARP ALECSANDRO
+      "ART ARAGUATINS": "63999997362",             // ART Mendes
+      "ATP ALTO PARNAÍBA": "99999057580",             // ATP Marcidei
+      "AXA AXIXÁ": "98991675847",             // AXA Cleiton
+      "BAR BARRAS": "86994477448",             // BAR Sr Dourado
+      "BCA BACABEIRA": "98985250909",             // BCA Leonardo
+      "BCB BACURITUBA": "98985468726",             // BCB Claudio
+      "BCU BURITICUPU-LOJA": "99981076185",             // BCU Rodolfo
+      "BDC BODOCÓ": "87996314212",                  // BDC Wendell
+      "BDR BARRO DURO": "86999180313",              // BDR Gislene
+      "BEQ BEQUIMÃO": "98984886471",                // BEQ Douglas
+      "BFP BOMFIM DO PIAUI": "89981286010",          // BFP Valderedo
+      "BHO BOA HORA": "8681710509",                  // BHO Maria do Carmo
+      "BJT BOM JESUS DO TOCANTIMS": "99992087401",    // BJT Jose Carlos
+      "BLO BURITI DOS LOPES": "8699782039",           // BLO Gabriel
+      "BNT BENEDITINOS": "86995195606",               // BNT Nonato
+      "BOP BOQUEIRAO DO PIAUI": "86981424120",        // BOP Samara
+      "BRE BREJO": "9881980075",                     // BRE Alécio
+      "BUB BURITÍ BRAVO": "99999037125",             // BUB Ricardo
+      "BVI BELA VISTA DO MARANHÃO": "98992441759",    // BVI Jhon
+      "CAD CAMPO MAIOR DEPOSITO": "86981123928",     // CAD Luiz Mar
+      "CAM CAMPO MAIOR": "86999160607",             // CAM Francisco Silva
+      "CAV COCAL DOS ALVES": "86999288933",         // CAV Claudio Vinicios
+      "CBP CARAÚBAS": "86995517151",                // CBP Gil Leno
+      "CCA CAPITÃO DE CAMPOS": "86994420965",       // CCA Sa. Silvia
+      "CDF CODO MERCADO": "99999015664",             // CDF Almeida
+      "CED CEDRAL": "98985690118",                   // CED Jaciel
+      "CEN CENTRAL DO MARANHÃO": "98985036692",      // CEN Iethy
+      "CGT CHEGA TUDO": "98983303578",               // CGT Cleiton
+      "CHV CHAVAL": "88988010287",                   // CHV Rosana
+      "CIM CAMOCIM": "86999373538",                  // CIM Cristiano
+      "CLT COLINAS DO TOCANTINS": "63991078542",     // CLT Wendel
+      "CME CÂNDIDO MENDES": "98985889158",           // CME Renato
+      "CNB CANA BRAVA": "86994279847",               // CNB Jaíne
+      "COA CONCEIÇÃO DO ARAUGUAIA": "63992821378",   // COA Wanderson
+      "COC COCAL": "86999652020",                    // COC Joaozinho
+      "COM COLINAS": "99988528745",                  // COM Paulo Piu
+      "CPP CAMPINAS DO PIAUI": "89994681125",        // CPP Ivone Galdino
+      "CRB CARNAUBEIRAS": "98981365542",             // CRB Sebastião
+      "CRI CRISTÓPOLIS": "77998512252",              // CRI Brenda
+      "CST CASTELO DO PIAUÍ": "86981496832",         // CST Borges
+      "CTL CRISTALÂNDIA DO PIAUÍ": "89981017844",    // CTL Henrique
+      "CTP CARUTAPERA": "86999781432",               // CTP Erisnaldo
+      "CTZ COROATA TRIZIDELA": "86994950175",                 // CTZ Nilo Marcio
+      "ENC ENCRUZO (GOV.NUNES FREIRE": "98985982108",        // ENC Cleones
+      "ENO ESPERANTINOPOLIS": "99988441777",         // ENO Aguiar
+      "ESP ESPERANTINA": "86981194919",              // ESP Sr Délio
+      "EVL ELESBÃO VELOSO": "86995474288",           // EVL Apolo
+      "FLD DEPÓSITO DE FLORIANO": "89994592292",     // FLD Laercio
+      "FMC MERCADO VELHO CENTRO": "86988961700",     // FMC SRA SILVA
+      "FTI FRIGORIFICO": "86981204338",              // FTI Lima
+      "GDI GONSALVES DIAS": "99984572107",           // GDI Daniel
+      "GDV GODOFREDO VIANA": "98984608815",          // GDV Sales
+      "GUI GUIMARÃES": "98981229570",                // GUI João Batista
+      "GUM BOA VISTA DO GURUPI": "98984568705",      // GUM Lenno
+      "HBC HUMBERTO DE CAMPOS": "98984610469",       // HBC Mario Marques
+      "HUN HUGO NAPOLEAO": "86998043115",            // HUN Aline
+      "ICT ICATU": "98982960403",                    // ICT Rodrigo
+      "IGE IGARAPE GRANDE": "99982178890",           // IGE Marcone
+      "IMOVEIS NOVOS E USADOS": "86999865050",       // IMOVEIS ADALBERTO
+      "INH INHUMA": "89994587736",                   // INH Jandira
+      "IPM IGARAPÉ DO MEIO": "98985892818",          // IPM Wanderson
+      "ITI ITAINÓPOLIS": "8994295657",              // ITI Irineu
+      "JAI JAICÓS": "89981053131",                   // JAI Jaedson
+      "JFT JOSÉ DE FREITAS": "86998515737",          // JFT Simone 
+      "JPR JOAQUIM PIRES": "86999381340",            // JPR Junior
+      "JUA JUAZEIRO": "74981166202",                 // JUA Elinton
+      "JUP JUAZEIRO DO PIAUI": "86981616011",        // JUP Ronaldo
+      "LAB LAGOA DO BARRO": "89994627281",           // LAB Claudemir
+      "LAL LAGOA ALEGRE": "86998298036",             // LAL Matheus
+      "LCO LUIS CORREIA": "86994068285",             // LCO Abdallah
+      "LCU CONCEIÇÃO DO LAGO AÇÚ": "99984818815",    // LCU João Neto
+      "LDO LUÍS DOMINGUES": "98984089551",           // LDO Edson
+      "LUZ LUZILANDIA": "88992844543",               // LUZ Samuel
+      "MAS MARACAÇUMÉ": "98984009532",               // MAS Rodrigo
+      "MEM MANOEL EMIDIO": "89994293770",            // MEM Tales
+      "MGL MONSENHOR GIL": "86999026987",            // MGL Mauro
+      "MIA MIGUEL ALVES": "86999781426",             // MIA Bento
+      "MIO MATIAS OLÍMPIO": "86981116118",           // MIO Carmelita
+      "MIR MIRANDA DO NORTE": "99981184195",         // MIR Erenildo
+      "MIZ MIRINZAL": "98981337494",                 // MIZ Nelson
+      "MON MONÇÃO": "98991783647",                   // MON Rodrigo
+      "MPO MURICI DOS PORTELAS": "86995373338",             // MPO Sergio
+      "MRA MATA ROMA": "98984570437",             // MRA Hemerson
+      "MRO MORROS": "98985429195",             // MRO Leal (Ger. Loja)
+      "MTS MATÕES": "99988033939",             // MTS Evilásio
+      "NIQ NOVA IORQUE": "99984207322",             // NIQ Eduardo
+      "NSA NOVO SANTO ANTONIO": "86981928275",             // NSA Daniel
+      "NSR NOSSA SENHORA DOS REMÉDIOS": "86981120507",        // NSR Carlos Eugenio
+      "OEI OEIRAS": "89999923500",             // OEI Manoel
+      "OUR OURICURI": "87991675039",             // OUR Leonardo
+      "PAL PALMEIRAIS": "86994716455",             // PAL Iranildo
+      "PAS PARAISO": "98984822446",             // PAS Matheus
+      "PAU PAULISTANA": "89994403050",             // PAU Ismael
+      "PBO PASTOS BONS": "99988072399",             // PBO Fernando
+      "PCA PARNAIBA CARAMURU": "86994139938",             // PCA Ze Roberto
+      "PDA ASSISTENCIA PEDREIRAS": "99981390851",             // PDA Deoclecio 
+      "PDM PRESIDENTE MEDICE": "98984415900",             // PDM Gilderlan
+      "PEN PENALVA": "98981512748",             // PEN Andre
+      "PER PERITORO": "99991264757",             // PER Maldermi
+      "PFR PASSAGEM FRANCA": "99984233802",             // PFR Zé Filho (Ger. Loja)
+      "PID PIRIPIRI DEPOSITO": "86999267020",             // PID Julio Pinto
+      "PII PEDRO II": "86999085224",             // PII Ivan
+      "PIM PICOS MOVEIS": "89999841305",             // PIM Renato Leal
+      "PIP PIRAPEMAS": "98984990393",             // PIP Elson
+      "PIR PIRIPIRI": "86999819700",             // PIR Daniel
+      "PIX PIO IX": "89999976544",             // PIX Joseane
+      "PJM PETROLINA JOSÉ E MARIA": "74988019949",             // PJM Marco
+      "PLA PILÃO ARCADO": "87991133821",             // PLA Elzenildo
+      "PLN PAULINO NEVES": "98985151981",             // PLN Mauro
+      "PLT PALESTINA": "98985103746",             // PLT Deivid
+      "PMA PADRE MARCOS": "89999007310",             // PMA Rone Sergio
+      "PME PALMEIRANDIA": "9885770565",             // PME Ronilson
+      "PMI PINDARE MIRIM MA": "98992419862",             // PMI Fabiano
+      "PNE PRAIA NORTE": "63999944919",             // PNE Walla
+      "PNO PARAIBANO": "99984909853",             // PNO Elivanio
+      "POM PORTO RICO DO MARANHÃO": "98984246825",             // POM Marcionilson
+      "PPE POÇAO DE PEDRAS": "99988224360",             // PPE Deicivam
+      "PPM PARNAÍBA PINHEIRO MACHADO": "86994698123",          // PPM Marcos Pereira 
+      "UBS URBANO SANTOS": "98988643656",            // Paulo
+      "SMR SANTO AMARO DO MARANHÃO": "9884564704",              // Anderson
+      "TUT TUTOIA": "86981575747",             // TUT Zé Maria
+      "SRI SANTA RITA": "98984650613",              // AMORIM
+      "SJE SÃO JOÃO DO SOTER": "99984464918",             // ISRAEL 
+      "SAM SÃO MATEUS DO MARANHÃO": "98991321573",   //  PAULO BATISTA
+      "SLG SÃO LUIS GONZAGA DO MARANHÃO": "98982840842",   // EDEVALDO
+      "SLZ SANTA LUZIA DO TIDE": "98991585516",   // ANTÔNIO
+      "SPB SÃO PEDRO DA ÁGUA BRANCA": "99985510939",         // ARLETE
+      "SFB SÃO FRANCISCO DO BREJÃO": "99984123275",           // LIULI
+      "STN SITIO NOVO DO TOCANTINS": "63991159200",     // LUIZ FILIPE
+      "SPT SAMPAIO": "63992810680",          // RAELSON BRITO
+      "ABR ANGICAL DO PIAUÍ": "8694634023",          // Claudio Santos
+      "AMA AMARANTE": "86998181682",          // LUIZ ANTÔNIO
+      "ANG ANGICAL DO PIAUÍ": "86995618573",      // RAIMUNDO
+      "REG REGENERAÇÃO": "86994151597",            //  RICARDO
+      "AGR AGRICOLÂNDIA": "8694038266",        // Francivaldo
+      "SPE SÃO PEDRO DO PIAUÍ": "86998402978", // SA ROSILENE
+      "ALG ALTO LONGÁ": "86981152630",          // SA LEONICE
+      "OEI OEIRAS": "89999923500",                  // MANOEL
+      "SCP SANTA CRUZ DO PIAUÍ": "89988126595",   // WILLIANS
+      "SJP SÃO JOÃO DO PIAUÍ": "89981008678",       // JHONAS
+      "VAL VALENÇA DO PIAUÍ": "89994030910",        // VELOSO
+      "WAF WALL FERRAZ": "89988318168",          // APARECIDA
+      "SMT SÃO MIGUEL DO TAPUIO": "86981227866",     // PEDRO
+      "UNI UNIÃO": "86981365902",                // IRANILDON
+      "PRT PORTO": "86981820740",                    // PAIVA
+      "SBT SÃO BENEDITO": "88992063522",       // SR FABRICIO
+      "TIA TIANGUÁ": "88992212406",        // FRANCISCO DAVID
+      "CCA CAPITAO DE CAMPOS": "86994420965",   // SA SILVIA
+      "SFR SÃO FRANCISCO DO MA": "8695668245",   // FERNANDO
+      "SJS SÃO JOÃO DA SERRA": "8695668245",   // EDNA MACÊDO
+      "RGO RIBEIRO GONÇALVES": "89999726567",      //  WICLEFSON
+      "TRI TRINDADE": "87991075952",                //  SEBASTIÃO
+      "VIC VIÇOSA DO CEARÁ": "88992670439",      // EDYVAN SOUSA (GERENTE) 
+      "SRN SÃO RAIMUNDO NONATO": "89988185011",     // APARICIDA (GERENTE)
+      "RDP REDENÇÃO DO PARA": "63992444243",               // MOTA GERENTE
+      "SRO SERROLANDIA": "87981466577",                // SAMUEL (GERENTE)
+      "TUN TUNTUM":  "99985166403",                             // JOÃO VITOR (GERENTE)
+      "BBV BACABAL BELA VISTA": "9984413306",               // ASSIS GERENTE
+      "SAD SAO DOMINGOS DO MARANHAO": "9991865959",                // Wilson (GERENTE)
+      "SGP SIGEFREDO PACHECO-PI": "8681187082",                // Leandro Chefe De Exposição  
+      "SJV SAO JOAO DA VARJOTA": "8988123979",               // Chrystian De Didé GERENTE
+      "SNM SITIO NOVO DO MARANHAO": "9984526297",               // JOYCE
+      "TES TERESINA SHOPPING": "8699822764",               // Carlos Bacelar
+      "TEZ ANTIGO PREDIO TAT": "8699865050",               // Sr.Adalberto  Gerente
+      "TIM LOJA TIMON SEM ZAP": "",               // SA REJANE GERENTE
+      "TPI PIÇARREIRA": "8688051141",               // Sr.Lindomar GERENTE
+      "TPP PAEQUE PIAUI": "8694897806",               // Sr.PAULO GERENTE TPP
+      "TSJ SAO JOAQUIM": "8699531281",               // Sr.Josias Gerente
+      "VLD IDELMAR": "9991233950",               // Elias Gerente 
+      "WAD WANDERLANDIA": "6392973195",               // ROBERTO GERENTE 
+      "VAG VARGEM GRANDE": "9886072120",               // Meireles Gerente
+      "ROS ROSÁRIO": "9882457009",               // Nonato GERENTE
+    };
+
+    function compartilharWhatsApp() {
+      const container = document.getElementById('ocorrenciasGeradas');
+      if (container.children.length === 0) {
+        alert('Nenhuma ocorrência gerada para compartilhar!');
         return;
       }
-      const html = tabela.outerHTML;
+
+      const ultimaOcorrencia = container.lastElementChild;
+      let texto = '';
+      ultimaOcorrencia.querySelectorAll('p').forEach(p => {
+        texto += p.textContent + '\n';
+      });
+
+      const textoCodificado = encodeURIComponent(texto.trim());
+
+      const local = document.getElementById('localMonitorado').value;
+      const numero = numerosGerentes[local];
+
+      if (!numero) {
+        alert('Número de gerente não cadastrado para este local.');
+        return;
+      }
+
+      // Inclui DDI (55) e DDD (99) — altere "99" para o DDD correto
+      const link = `https://wa.me/5599${numero}?text=${textoCodificado}`;
+      window.open(link, '_blank');
+    }
+
+    function exportarParaExcel(idTabela, nomeArquivo = 'export') {
+      const tabela = document.getElementById(idTabela);
+      if (!tabela || tabela.style.display === 'none') {
+        alert('Não há dados para exportar!');
+        return;
+      }
+
+      const htmlTabela = tabela.outerHTML;
+      const uri = 'data:application/vnd.ms-excel;base64,';
+      const base64 = s => window.btoa(unescape(encodeURIComponent(s)));
+      const href = uri + base64(htmlTabela);
+
       const link = document.createElement('a');
-      link.href = 'data:application/vnd.ms-excel,' + encodeURIComponent(html);
-      link.download = (nomeArquivo || 'export') + '.xls';
+      link.href = href;
+      link.download = nomeArquivo + '.xls';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
-  &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  </script>
+</body>
+</html>
